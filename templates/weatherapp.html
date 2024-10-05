@@ -1,0 +1,58 @@
+{% extends "index.html" %}
+{% block content %}
+    <div class="container-fluid" style="margin-top:60px; margin-bottom:100px">
+        <div class="col-md-offset-4 col-md-3">
+            <!--This is header of webpage-->
+            <h3 class="page-header text-primary text-center"><span class="fa fa-cloud-sun"></span> Weather Application</h3>
+
+            <!--This this messages code of views.py-->
+            {% if messages %}
+            {% for message in messages %}
+                {% if message.tags ==  'error' %}
+                  <div class="alert alert-danger">
+                    {{ message }}
+                  </div>
+                {% else %}
+                   <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                   </div>
+                {% endif %}
+            
+            {% endfor %}
+            
+            {% endif %}
+
+            <!--use form-->
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-group">
+                    <!--Here i write views,-> Form like home function-->
+                    {{form.name}}
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="Submit"><span class="fa fa-add"></span> Add City</button>
+                    </span>
+                </div>
+            </form>
+            {% for city_weather in data %}
+                {% comment %} {{ city_weather }} {% endcomment %}
+                <div class="shadow media" style="display:flex;">
+                    <a href="#">
+                        <img src="http://openweathermap.org/img/w/{{city_weather.icon}}.png" class="media-object" alt="Image">
+            
+                
+                    <div class="media-body">
+                        <h3 class="media-heading"><b>{{ city_weather.city }}</b></h3>
+                        <h4>{{ city_weather.temprature }}&deg;C</h4>
+                        <h4>{{ city_weather.description }}</h4>
+                        <h4>{{ city_weather.country }}</h4>
+                   </div>
+
+                   <div class="media-right">
+                        <h3><a href="{% url 'DCity' city_weather.city %}" style="text-decoration:none"; class="text-danger">&#x2718;</a></h3>
+                   </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}
